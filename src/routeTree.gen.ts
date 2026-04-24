@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AddRouteImport } from './routes/add'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MembersIdRouteImport } from './routes/members.$id'
+import { Route as MembersIdEditRouteImport } from './routes/members.$id.edit'
 
 const MembersRoute = MembersRouteImport.update({
   id: '/members',
@@ -40,20 +41,27 @@ const MembersIdRoute = MembersIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => MembersRoute,
 } as any)
+const MembersIdEditRoute = MembersIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => MembersIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
   '/auth': typeof AuthRoute
   '/members': typeof MembersRouteWithChildren
-  '/members/$id': typeof MembersIdRoute
+  '/members/$id': typeof MembersIdRouteWithChildren
+  '/members/$id/edit': typeof MembersIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add': typeof AddRoute
   '/auth': typeof AuthRoute
   '/members': typeof MembersRouteWithChildren
-  '/members/$id': typeof MembersIdRoute
+  '/members/$id': typeof MembersIdRouteWithChildren
+  '/members/$id/edit': typeof MembersIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +69,28 @@ export interface FileRoutesById {
   '/add': typeof AddRoute
   '/auth': typeof AuthRoute
   '/members': typeof MembersRouteWithChildren
-  '/members/$id': typeof MembersIdRoute
+  '/members/$id': typeof MembersIdRouteWithChildren
+  '/members/$id/edit': typeof MembersIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add' | '/auth' | '/members' | '/members/$id'
+  fullPaths:
+    | '/'
+    | '/add'
+    | '/auth'
+    | '/members'
+    | '/members/$id'
+    | '/members/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add' | '/auth' | '/members' | '/members/$id'
-  id: '__root__' | '/' | '/add' | '/auth' | '/members' | '/members/$id'
+  to: '/' | '/add' | '/auth' | '/members' | '/members/$id' | '/members/$id/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/add'
+    | '/auth'
+    | '/members'
+    | '/members/$id'
+    | '/members/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -115,15 +137,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MembersIdRouteImport
       parentRoute: typeof MembersRoute
     }
+    '/members/$id/edit': {
+      id: '/members/$id/edit'
+      path: '/edit'
+      fullPath: '/members/$id/edit'
+      preLoaderRoute: typeof MembersIdEditRouteImport
+      parentRoute: typeof MembersIdRoute
+    }
   }
 }
 
+interface MembersIdRouteChildren {
+  MembersIdEditRoute: typeof MembersIdEditRoute
+}
+
+const MembersIdRouteChildren: MembersIdRouteChildren = {
+  MembersIdEditRoute: MembersIdEditRoute,
+}
+
+const MembersIdRouteWithChildren = MembersIdRoute._addFileChildren(
+  MembersIdRouteChildren,
+)
+
 interface MembersRouteChildren {
-  MembersIdRoute: typeof MembersIdRoute
+  MembersIdRoute: typeof MembersIdRouteWithChildren
 }
 
 const MembersRouteChildren: MembersRouteChildren = {
-  MembersIdRoute: MembersIdRoute,
+  MembersIdRoute: MembersIdRouteWithChildren,
 }
 
 const MembersRouteWithChildren =
