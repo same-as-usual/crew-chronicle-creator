@@ -2,7 +2,7 @@
 
 ## Stack adaptation (read this first)
 
-The original spec asks for **Express + MongoDB + Multer + local /uploads folder**. Lovable's runtime is **TanStack Start (React + server functions on Cloudflare Workers) with Lovable Cloud (Postgres + Storage)**. Express/MongoDB/local filesystem don't run here
+The original spec asks for **Express + MongoDB + Multer + local /uploads folder**. Lovable's runtime is **TanStack Start (React + server functions on Cloudflare Workers) with Lovable Cloud (Postgres + Storage)**. Express/MongoDB/local filesystem don't run here.
 
 I'll build the **same app, same routes, same UX, same CRUD**, just on the supported stack:
 
